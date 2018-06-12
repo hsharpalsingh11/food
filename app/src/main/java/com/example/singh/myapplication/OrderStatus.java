@@ -61,7 +61,7 @@ public class OrderStatus extends AppCompatActivity
 
                 Toast.makeText(OrderStatus.this, ""+adapter.getRef(position).getKey().toString(), Toast.LENGTH_SHORT).show();
                 viewHolder.txtOrderId.setText(orderId);
-                viewHolder.txtOrderStatus.setText(convertCodeToStatus(model.getStatus()));
+                viewHolder.txtOrderStatus.setText(Common.convertCodeToStatus(model.getStatus()));
                 viewHolder.txtOrderAddress.setText(model.getAddress());
                 viewHolder.txtOrderPhone.setText(newString);
             }
@@ -69,12 +69,5 @@ public class OrderStatus extends AppCompatActivity
         recyclerViewStatus.setAdapter(adapter);
     }
 
-    private String convertCodeToStatus(String status)
-    {
-        if (status.equals("0"))
-            return "Placed";
-        else if(status.equals("1"))
-            return "On My Way";
-        else return "Shipped";
-    }
+
 }

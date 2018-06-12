@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.singh.myapplication.Interface.ItemClickListener;
 import com.example.singh.myapplication.Model.Category;
+import com.example.singh.myapplication.Service.ListenOrder;
 import com.example.singh.myapplication.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -96,6 +97,12 @@ public class Home extends AppCompatActivity
 
 
         loadMenu();
+
+        //Register service
+        Intent service = new Intent(Home.this, ListenOrder.class);
+        startService(service);
+
+
     }
 
     private void loadMenu()
@@ -110,21 +117,22 @@ public class Home extends AppCompatActivity
                 viewHolder.txtMenuName.setText(model.getName());
                 Picasso.with(getBaseContext()).load(model.getImage())
                         .into(viewHolder.imageView);
-                final Category clickItem = model;
+               // final Category clickItem = model;
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onCLick(View view, int position, boolean isLongClick)
                     {
                         //Get CategoryId and send to new Activity
-                       Intent foodlist = new Intent(Home.this,FoodList.class);
+                       Intent foodList = new Intent(Home.this,FoodList.class);
                         //Because Category is key, so we Just get Key of this item
-                        foodlist.putExtra("CategoryId",adapter.getRef(position).getKey());
-                        startActivity(foodlist);
+                        foodList.putExtra("CategoryId",adapter.getRef(position).getKey());
+                        startActivity(foodList);
                     }
                 });
 
             }
         };
+        adapter.notifyDataSetChanged();
         recycler_menu.setAdapter(adapter);
     }
 
