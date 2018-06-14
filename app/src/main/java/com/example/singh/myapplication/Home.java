@@ -20,12 +20,15 @@ import android.widget.Toast;
 
 import com.example.singh.myapplication.Interface.ItemClickListener;
 import com.example.singh.myapplication.Model.Category;
+import com.example.singh.myapplication.Model.UserSessionManager;
 import com.example.singh.myapplication.Service.ListenOrder;
 import com.example.singh.myapplication.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -34,6 +37,7 @@ public class Home extends AppCompatActivity
     DatabaseReference category;
     TextView txtFullName,txtPhone;
     String newString;
+    UserSessionManager session;
 
     RecyclerView recycler_menu;
     RecyclerView.LayoutManager layoutManager;
@@ -45,14 +49,28 @@ public class Home extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        session = new UserSessionManager(getApplicationContext());
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
         setSupportActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
-        newString = getIntent().getExtras().getString("STRING_I_NEED");
+       // newString = getIntent().getExtras().getString("STRING_I_NEED");
         //Toast.makeText(this, "phone "+newString, Toast.LENGTH_SHORT).show();
+        HashMap<String, String> user = session.getUserDetails();
+
+        // name
+        String name = user.get(UserSessionManager.KEY_NAME);
+        newString = user.get(UserSessionManager.KEY_PhONE);
+
+        Toast.makeText(this, "name : "+name, Toast.LENGTH_SHORT).show();
+
+        // email
+        String phone = user.get(UserSessionManager.KEY_PhONE);
+        Toast.makeText(this, "phone : "+phone, Toast.LENGTH_SHORT).show();
+
 
         //Init Firebase
         database = FirebaseDatabase.getInstance();
@@ -85,8 +103,8 @@ public class Home extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         txtFullName = (TextView)headerView.findViewById(R.id.txtFullName);
         txtPhone = (TextView)headerView.findViewById(R.id.txtPhone);
-        txtFullName.setText(Common.currentUser.getName());
-        txtPhone.setText(newString);
+        txtFullName.setText(name);
+        txtPhone.setText(phone);
 
         //Load Menu
         recycler_menu = (RecyclerView)findViewById(R.id.recyclerView);
@@ -98,8 +116,10 @@ public class Home extends AppCompatActivity
 
         loadMenu();
 
+
         //Register service
         Intent service = new Intent(Home.this, ListenOrder.class);
+        service.putExtra("STRING_I_NEED", newString);
         startService(service);
 
 
@@ -183,9 +203,10 @@ public class Home extends AppCompatActivity
 
         } else if (id == R.id.nav_logout)
         {
-            Intent main = new Intent(Home.this,MainActivity.class);
-            main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(main);
+            session.logoutUser();
+           // Intent main = new Intent(Home.this,MainActivity.class);
+            //main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //startActivity(main);
 
         }
 

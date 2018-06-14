@@ -34,7 +34,7 @@ public class FoodList extends AppCompatActivity
     RecyclerView.LayoutManager layoutManagerFood;
 
     FirebaseDatabase firebaseDatabase;
-    DatabaseReference foodlist;
+    DatabaseReference foodList;
 
     String categoryId = "";
     FirebaseRecyclerAdapter<Food,FoodViewHolder> adapterFood;
@@ -55,7 +55,7 @@ public class FoodList extends AppCompatActivity
 
         //Firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
-        foodlist = firebaseDatabase.getReference("Food");
+        foodList = firebaseDatabase.getReference("Food");
 
         recyclerViewFood = (RecyclerView)findViewById(R.id.recyclerViewFoods);
         recyclerViewFood.setHasFixedSize(true);
@@ -132,7 +132,7 @@ public class FoodList extends AppCompatActivity
                 Food.class,
                 R.layout.food_item,
                 FoodViewHolder.class,
-                foodlist.orderByChild("Name").equalTo(text.toString())
+                foodList.orderByChild("name").equalTo(text.toString())
         ) {
             @Override
             protected void populateViewHolder(FoodViewHolder viewHolder, Food model, int position) {
@@ -157,7 +157,7 @@ public class FoodList extends AppCompatActivity
 
     private void loadSuggest()
     {
-        foodlist.orderByChild("MenuId").equalTo(categoryId)
+        foodList.orderByChild("menuId").equalTo(categoryId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -180,7 +180,7 @@ public class FoodList extends AppCompatActivity
         adapterFood = new FirebaseRecyclerAdapter<Food, FoodViewHolder>(Food.class,
                 R.layout.food_item,
                 FoodViewHolder.class,
-                foodlist.orderByChild("MenuId").equalTo(categoryId)
+                foodList.orderByChild("menuId").equalTo(categoryId)
         ) {
             @Override
             protected void populateViewHolder(FoodViewHolder viewHolder, Food model, int position) {

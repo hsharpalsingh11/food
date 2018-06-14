@@ -17,12 +17,14 @@ import android.widget.Toast;
 import com.example.singh.myapplication.Database.Database;
 import com.example.singh.myapplication.Model.Order;
 import com.example.singh.myapplication.Model.Request;
+import com.example.singh.myapplication.Model.UserSessionManager;
 import com.example.singh.myapplication.ViewHolder.CartAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,7 +35,10 @@ public class Cart extends AppCompatActivity
 
     FirebaseDatabase database;
     DatabaseReference requests;
-    String newString= " ";
+    String newString= "";
+    String namee= "";
+    UserSessionManager session;
+
 
     TextView txtTotalPrice;
     Button btnPlace;
@@ -47,7 +52,13 @@ public class Cart extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-        newString = getIntent().getExtras().getString("STRING_I_NEED");
+       // newString = getIntent().getExtras().getString("STRING_I_NEED");
+        session = new UserSessionManager(getApplicationContext());
+        HashMap<String, String> user = session.getUserDetails();
+
+        // name
+        namee = user.get(UserSessionManager.KEY_NAME);
+        newString = user.get(UserSessionManager.KEY_PhONE);
 
 
         //Firebase
@@ -117,7 +128,7 @@ public class Cart extends AppCompatActivity
                         edtAddress.getText().toString(),
 
                         txtTotalPrice.getText().toString(),
-                        Common.currentUser.getName(),
+                        namee,
 
                         cart
                         );

@@ -34,6 +34,8 @@ public class OrderStatus extends AppCompatActivity
         //FIrebase
         database = FirebaseDatabase.getInstance();
         requests= database.getReference("Requests");
+
+
         newString = getIntent().getExtras().getString("STRING_I_NEED");
 
 
@@ -41,8 +43,14 @@ public class OrderStatus extends AppCompatActivity
         recyclerViewStatus.setHasFixedSize(true);
         layoutManagerStatus = new LinearLayoutManager(this) ;
         recyclerViewStatus.setLayoutManager(layoutManagerStatus);
-        loadOrders(Common.currentUser.getPhone());
-        
+
+        if (getIntent()== null)
+        {
+            loadOrders(newString);
+        }
+        else
+            loadOrders(newString);
+
     }
 
     private void loadOrders(String phone)

@@ -3,6 +3,7 @@ package com.example.singh.myapplication.ViewHolder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.singh.myapplication.Interface.ItemClickListener;
 import com.example.singh.myapplication.R;
@@ -32,7 +33,7 @@ public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnC
     @Override
     public void onClick(View v)
     {
-        itemClickListener.onCLick(v,getAdapterPosition(),false);
+        //itemClickListener.onCLick(v,getAdapterPosition(),false);
 
     }
 }

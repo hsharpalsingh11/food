@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.singh.myapplication.Model.User;
+import com.example.singh.myapplication.Model.UserSessionManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +21,8 @@ public class SignUp extends AppCompatActivity
 {
 
     Button signUp;
+    UserSessionManager session;
+
     MaterialEditText edtPhone,edtName,edtPassword;
 
     @Override
@@ -27,6 +30,8 @@ public class SignUp extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        session = new UserSessionManager(getApplicationContext());
+
         edtPassword = (MaterialEditText)findViewById(R.id.edtPassword);
         edtName = (MaterialEditText)findViewById(R.id.edtName);
         edtPhone = (MaterialEditText)findViewById(R.id.edtPhone);
@@ -63,9 +68,11 @@ public class SignUp extends AppCompatActivity
                             User user = new User(edtName.getText().toString(),edtPassword.getText().toString(),edtPhone.getText().toString());
                             table_user.child(edtPhone.getText().toString()).setValue(user);
                             Toast.makeText(SignUp.this, "Signed Up Successfully", Toast.LENGTH_SHORT).show();
-                            Toast.makeText(SignUp.this, ""+user.getPhone().toString(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(SignUp.this, ""+user.getPhone().toString(), Toast.LENGTH_SHORT).show();
                             String phone = user.getPhone().toString();
                             Common.currentUser = user;
+                            session.createLoginSession(edtName.getText().toString(), phone);
+
 
 
                             Intent homeIntent = new Intent(SignUp.this,Home.class);
