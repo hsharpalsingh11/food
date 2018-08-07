@@ -1,17 +1,18 @@
 package com.example.singh.myapplication;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
+import com.example.singh.myapplication.Common.Common;
 import com.example.singh.myapplication.Model.Request;
 import com.example.singh.myapplication.ViewHolder.OrderViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 public class OrderStatus extends AppCompatActivity
 {
@@ -55,11 +56,15 @@ public class OrderStatus extends AppCompatActivity
 
     private void loadOrders(String phone)
     {
+       Query getOrderByUser = requests.orderByChild("phone").equalTo(phone);
+
+       // FirebaseRecyclerOptions<Request> orderOptions = new FirebaseRecycleroptions.Builder<Request>().setQuery(getOrderByUser,Request.class).build();
+
         adapter = new FirebaseRecyclerAdapter<Request, OrderViewHolder>(
                 Request.class,
                 R.layout.order_layout,
                 OrderViewHolder.class,
-                requests.orderByChild("phone").equalTo(newString)
+                requests.orderByChild("phone").equalTo(phone)
         ) {
             @Override
             protected void populateViewHolder(OrderViewHolder viewHolder, Request model, int position) {

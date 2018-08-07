@@ -6,16 +6,37 @@ public class User
     private String Password;
     private String Phone;
     private String IsStaff;
+    private String secureCode;
+    private double balance;
 
     public User() {
     }
 
-    public User(String name, String password, String phone)
+    public String getSecureCode() {
+        return secureCode;
+    }
+
+    public void setSecureCode(String secureCode) {
+        this.secureCode = secureCode;
+    }
+
+    public User(String name, String password, String phone, String secureCode, double balance)
     {
         Name = name;
         Password = password;
         Phone = phone;
         IsStaff = "false";
+        this.secureCode = secureCode;
+        this.balance = balance;
+
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public String getIsStaff() {

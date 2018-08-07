@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.singh.myapplication.Common.Common;
 import com.example.singh.myapplication.Model.User;
 import com.example.singh.myapplication.Model.UserSessionManager;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +24,7 @@ public class SignUp extends AppCompatActivity
     Button signUp;
     UserSessionManager session;
 
-    MaterialEditText edtPhone,edtName,edtPassword;
+    MaterialEditText edtPhone,edtName,edtPassword,edtSecureCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,6 +36,7 @@ public class SignUp extends AppCompatActivity
         edtPassword = (MaterialEditText)findViewById(R.id.edtPassword);
         edtName = (MaterialEditText)findViewById(R.id.edtName);
         edtPhone = (MaterialEditText)findViewById(R.id.edtPhone);
+        edtSecureCode = (MaterialEditText) findViewById( R.id.edtSecureCode );
         signUp = (Button)findViewById(R.id.signUp
         );
 
@@ -47,48 +49,48 @@ public class SignUp extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                final ProgressDialog mDialog = new ProgressDialog(SignUp.this);
-                mDialog.setMessage("Please waiting...");
-                mDialog.show();
+                if(Common.isConnectedToInternet( getBaseContext() )) {
+                    final ProgressDialog mDialog = new ProgressDialog( SignUp.this );
+                    mDialog.setMessage( "Please waiting..." );
+                    mDialog.show();
 
-                table_user.addValueEventListener(new ValueEventListener()
+                    table_user.addValueEventListener( new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.child( edtPhone.getText().toString() ).exists()) {
+                                mDialog.dismiss();
+                                Toast.makeText( SignUp.this, "Already Exists", Toast.LENGTH_SHORT ).show();
+
+                            } else {
+                                mDialog.dismiss();
+                                User user = new User( edtName.getText().toString(), edtPassword.getText().toString(), edtPhone.getText().toString(),edtSecureCode.getText().toString(),0.0);
+                                table_user.child( edtPhone.getText().toString() ).setValue( user );
+                                Toast.makeText( SignUp.this, "Signed Up Successfully", Toast.LENGTH_SHORT ).show();
+                                //Toast.makeText(SignUp.this, ""+user.getPhone().toString(), Toast.LENGTH_SHORT).show();
+                                String phone = user.getPhone().toString();
+                                Common.currentUser = user;
+                                session.createLoginSession( edtName.getText().toString(), phone ,edtPassword.getText().toString());
+
+
+                                Intent homeIntent = new Intent( SignUp.this, Home.class );
+                                homeIntent.putExtra( "STRING_I_NEED", phone );
+                                startActivity( homeIntent );
+                                finish();
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    } );
+                }
+                else
                 {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot)
-                    {
-                        if(dataSnapshot.child(edtPhone.getText().toString()).exists())
-                        {
-                            mDialog.dismiss();
-                            Toast.makeText(SignUp.this, "Already Exists", Toast.LENGTH_SHORT).show();
-
-                        }
-                        else
-                        {
-                            mDialog.dismiss();
-                            User user = new User(edtName.getText().toString(),edtPassword.getText().toString(),edtPhone.getText().toString());
-                            table_user.child(edtPhone.getText().toString()).setValue(user);
-                            Toast.makeText(SignUp.this, "Signed Up Successfully", Toast.LENGTH_SHORT).show();
-                            //Toast.makeText(SignUp.this, ""+user.getPhone().toString(), Toast.LENGTH_SHORT).show();
-                            String phone = user.getPhone().toString();
-                            Common.currentUser = user;
-                            session.createLoginSession(edtName.getText().toString(), phone);
-
-
-
-                            Intent homeIntent = new Intent(SignUp.this,Home.class);
-                            homeIntent.putExtra("STRING_I_NEED", phone);
-                            startActivity(homeIntent);
-                            finish();
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
+                    Toast.makeText( SignUp.this, "Please Check Your Connection !!", Toast.LENGTH_SHORT ).show();
+                    return;
+                }
             }
         });
     }

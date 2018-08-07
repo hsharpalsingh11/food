@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:hint="Phone Number"
             android:inputType="phone"
-            android:text="6477671290"
+            android:text=""
             android:textColor="@android:color/holo_blue_bright"
             android:textColorHint="@android:color/holo_blue_bright"
             android:textSize="34sp"
@@ -35,7 +35,7 @@
             android:id="@+id/edtPassword"
             android:hint="Password"
             android:textColorHint="@android:color/white"
-            android:text="6338"
+            android:text=""
             android:textSize="34sp"
             android:textColor="@android:color/holo_blue_bright"
             android:inputType="textPassword"
@@ -50,14 +50,39 @@
             android:text="Sign In"
             android:id="@+id/btnLogin"
             android:shadowColor="@android:color/black"
-            android:background="@color/btnSignUpActive"
             android:textColor="@android:color/white"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginBottom="1dp"
             android:layout_height="50dp" />
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+
+        <com.rey.material.widget.CheckBox
+            android:id="@+id/ckbRemember"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/Material.Drawable.CheckBox"
+            android:text="Remember me"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            app:cbd_strokeColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/txtForgotPwd"
+            android:textColor="@android:color/white"
+            android:text="@string/forgot_pwd"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
 
     </LinearLayout>
 

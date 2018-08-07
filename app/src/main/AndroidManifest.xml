@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.singh.myapplication">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -11,9 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"></meta-data>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBMMb6ru03x435MFbGfVOjE-ieI-keWr-M"></meta-data>
 
-        </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".SignIn" />
         <activity android:name=".SignUp" />
         <activity
@@ -25,11 +31,16 @@
         <activity android:name=".Cart" />
         <activity android:name=".OrderStatus" />
 
-        <service
-            android:name=".Service.ListenOrder"
-            android:enabled="true"
-            android:exported="true" />
-
+        <service android:name=".Service.MyFirebaseIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Service.MyFirebaseMessaging">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <activity android:name=".SplashScreen">
             <intent-filter>
@@ -38,6 +49,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider345647702632431"
+            android:exported="true" />
+
+        <activity android:name=".ShowComment"></activity>
     </application>
 
 </manifest>
